@@ -1,0 +1,39 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# CI/CD
+.github
+
+# Docs
+docs
+*.md
+
+# Frontend (not included in API image)
+frontend
+
+# Backend build artifacts
+backend/**/bin
+backend/**/obj
+backend/**/TestResults
+
+# Local dev / IDE
+.vscode
+.idea
+*.user
+*.suo
+.vs
+
+# Docker
+Dockerfile
+.dockerignore
+
+# Environment / secrets (never bake into image)
+**/.env
+**/.env.*
+**/appsettings.Development.json
+**/appsettings.Local.json
+
+# Node (if ever at root level)
+node_modules
