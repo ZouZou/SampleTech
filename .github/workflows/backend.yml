@@ -1,0 +1,38 @@
+name: Backend CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend.yml'
+
+jobs:
+  build-and-test:
+    name: Build & Test (.NET 10)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.x'
+
+      - name: Restore dependencies
+        run: dotnet restore backend/InsurancePlatform.slnx
+
+      - name: Build
+        run: dotnet build backend/InsurancePlatform.slnx --no-restore --configuration Release
+
+      - name: Test
+        run: dotnet test backend/InsurancePlatform.slnx --no-build --configuration Release --verbosity normal
+
+      - name: Publish (dry run)
+        run: dotnet publish backend/InsurancePlatform.Api/InsurancePlatform.Api.csproj --configuration Release --no-build -o /tmp/publish
