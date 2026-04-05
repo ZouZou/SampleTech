@@ -1,0 +1,114 @@
+<div class="support-contact">
+  <div class="page-header">
+    <div>
+      <h1 class="page-header__title">Contact Support</h1>
+      <p class="page-header__subtitle">We typically respond within 1 business day</p>
+    </div>
+  </div>
+
+  <div class="sc-layout">
+    <div class="sc-form-col">
+      @if (submitted()) {
+        <div class="card sc-success" role="status" aria-live="assertive">
+          <div class="sc-success__icon" aria-hidden="true">&#x2713;</div>
+          <h2 class="sc-success__title">Message Sent!</h2>
+          <p class="sc-success__id">Ticket ID: <strong>{{ ticketId() }}</strong></p>
+          <p class="sc-success__message">
+            Our support team will review your message and respond to your registered email within 1 business day.
+            For urgent claims, please call <strong>1-800-SAMPLE-1</strong>.
+          </p>
+          <button class="btn btn--outline" type="button" (click)="resetForm()"
+            aria-label="Submit another support request">
+            Submit Another Request
+          </button>
+        </div>
+      } @else {
+        <div class="card">
+          <form (ngSubmit)="submit()" novalidate>
+            <div class="form-group" style="margin-bottom: var(--space-4);">
+              <label class="form-label" for="sc-category">Category <span aria-label="required">*</span></label>
+              <select id="sc-category" class="form-control"
+                [ngModel]="category()" (ngModelChange)="category.set($event)" name="category" required>
+                <option value="">Select a category...</option>
+                <option>Policy Question</option>
+                <option>Billing & Payment</option>
+                <option>Claims Inquiry</option>
+                <option>Document Request</option>
+                <option>Coverage Change Request</option>
+                <option>Technical Issue</option>
+                <option>Other</option>
+              </select>
+            </div>
+
+            <div class="form-group" style="margin-bottom: var(--space-4);">
+              <label class="form-label" for="sc-subject">Subject <span aria-label="required">*</span></label>
+              <input id="sc-subject" class="form-control" type="text"
+                [ngModel]="subject()" (ngModelChange)="subject.set($event)"
+                name="subject" required placeholder="Brief description of your question" />
+            </div>
+
+            <div class="form-group" style="margin-bottom: var(--space-6);">
+              <label class="form-label" for="sc-message">Message <span aria-label="required">*</span></label>
+              <textarea id="sc-message" class="form-control" rows="6"
+                [ngModel]="message()" (ngModelChange)="message.set($event)"
+                name="message" required
+                placeholder="Please describe your issue or question in detail. Include any relevant policy numbers."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn--primary btn--lg"
+              style="width: 100%;"
+              [disabled]="submitting() || !subject() || !category() || !message()"
+              [attr.aria-busy]="submitting()">
+              @if (submitting()) {
+                <span class="spinner" aria-hidden="true"></span>
+                Sending...
+              } @else {
+                Send Message
+              }
+            </button>
+          </form>
+        </div>
+      }
+    </div>
+
+    <!-- Contact info sidebar -->
+    <aside class="sc-info-col" aria-label="Support contact information">
+      <div class="card sc-info-card">
+        <h2 class="sc-info-card__title">Other Ways to Reach Us</h2>
+        <ul class="sc-contact-list">
+          <li class="sc-contact-item">
+            <div class="sc-contact-icon" aria-hidden="true">📞</div>
+            <div>
+              <p class="sc-contact-label">Claims Hotline (24/7)</p>
+              <p class="sc-contact-value">1-800-SAMPLE-1</p>
+            </div>
+          </li>
+          <li class="sc-contact-item">
+            <div class="sc-contact-icon" aria-hidden="true">✉</div>
+            <div>
+              <p class="sc-contact-label">Email Support</p>
+              <p class="sc-contact-value">support@sampletech.com</p>
+            </div>
+          </li>
+          <li class="sc-contact-item">
+            <div class="sc-contact-icon" aria-hidden="true">🕐</div>
+            <div>
+              <p class="sc-contact-label">Business Hours</p>
+              <p class="sc-contact-value">Mon – Fri, 8:00 AM – 6:00 PM ET</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="card sc-emergency-card">
+        <h2 class="sc-emergency-card__title">Need to File a Claim?</h2>
+        <p class="sc-emergency-card__text">
+          For immediate assistance with an active claim or emergency, call our 24/7 claims line.
+        </p>
+        <a href="tel:18007265351" class="btn btn--primary" aria-label="Call claims hotline 1-800-SAMPLE-1">
+          Call 1-800-SAMPLE-1
+        </a>
+      </div>
+    </aside>
+  </div>
+</div>

@@ -1,14 +1,17 @@
 # .NET
-backend/**/bin/
-backend/**/obj/
-backend/**/*.user
-backend/**/.vs/
-backend/**/local.settings.json
+**/bin/
+**/obj/
+**/*.user
+**/.vs/
+**/local.settings.json
 
 # Angular
 frontend/node_modules/
 frontend/dist/
 frontend/.angular/
+frontend/**/node_modules/
+frontend/**/dist/
+frontend/**/.angular/
 
 # Environment files (never commit secrets)
 **/*.env

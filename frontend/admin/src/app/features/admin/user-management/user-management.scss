@@ -1,0 +1,30 @@
+.user-management {
+  max-width: var(--content-max-width);
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.um-name   { font-weight: var(--weight-medium); }
+.um-email  { color: var(--color-text-muted); font-size: var(--text-sm); }
+.um-tenant { color: var(--color-text-muted); }
+.um-login  { color: var(--color-text-muted); font-size: var(--text-sm); white-space: nowrap; }
+
+.um-actions {
+  display: flex;
+  gap: var(--space-1);
+  white-space: nowrap;
+}
+
+.um-actions__deactivate:hover {
+  color: var(--color-danger) !important;
+}
+
+.um-empty {
+  text-align: center;
+  color: var(--color-text-muted);
+  padding: var(--space-10) !important;
+  font-size: var(--text-sm);
+}

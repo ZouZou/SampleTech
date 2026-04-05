@@ -1,0 +1,46 @@
+<div class="broker-dashboard">
+  <div class="page-header">
+    <div>
+      <h1 class="page-header__title">Broker Dashboard</h1>
+      <p class="page-header__subtitle">Portfolio and performance overview — YTD 2026</p>
+    </div>
+    <a routerLink="/broker/portfolio" class="btn btn--primary">Full Portfolio</a>
+  </div>
+
+  <div class="stats-grid" role="list">
+    @for (stat of stats(); track stat.label) {
+      <div class="stat-card" role="listitem">
+        <div class="stat-card__label">{{ stat.label }}</div>
+        <div class="stat-card__value">{{ stat.value }}</div>
+        <div class="stat-card__change stat-card__change--{{ stat.direction }}">{{ stat.change }}</div>
+      </div>
+    }
+  </div>
+
+  <div class="card">
+    <div class="activity-header">
+      <h2 class="activity-header__title">Top Agencies by GWP</h2>
+      <a routerLink="/broker/agencies" class="btn btn--ghost btn--sm">All Agencies</a>
+    </div>
+    <table class="data-table" aria-label="Top agencies by gross written premium">
+      <thead>
+        <tr>
+          <th scope="col">Agency Name</th>
+          <th scope="col">GWP (YTD)</th>
+          <th scope="col">Active Policies</th>
+          <th scope="col">Commission Earned</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (a of topAgencies(); track a.name) {
+          <tr>
+            <td style="font-weight:500;">{{ a.name }}</td>
+            <td style="font-weight:500; color: var(--color-primary);">{{ a.gwp }}</td>
+            <td>{{ a.policies }}</td>
+            <td style="color: var(--color-success); font-weight:500;">{{ a.commission }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

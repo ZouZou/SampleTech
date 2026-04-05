@@ -1,0 +1,19 @@
+.commission-summary { max-width: var(--content-max-width); }
+
+.cs-filters__row {
+  display: flex;
+  gap: var(--space-4);
+  align-items: flex-end;
+}
+
+@media (max-width: 600px) {
+  .cs-filters__row { flex-direction: column; }
+}
+
+.sub-id { font-family: var(--font-mono); font-size: var(--text-xs); background: var(--color-bg-alt); padding: 2px var(--space-2); border-radius: var(--radius-sm); color: var(--color-primary); }
+
+.cs-total-row td {
+  border-top: 2px solid var(--color-border);
+  background: var(--color-bg-alt);
+  padding: var(--space-3) var(--space-4);
+}

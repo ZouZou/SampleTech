@@ -1,0 +1,4 @@
+.uw-dashboard { max-width: var(--content-max-width); }
+.activity-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-4); }
+.activity-header__title { font-family: var(--font-heading); font-size: var(--text-lg); font-weight: var(--weight-semibold); }
+.audit-action { font-family: var(--font-mono); font-size: var(--text-xs); background: var(--color-bg-alt); padding: 2px var(--space-2); border-radius: var(--radius-sm); color: var(--color-primary); }

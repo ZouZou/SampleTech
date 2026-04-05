@@ -1,0 +1,121 @@
+<div class="login-page" role="main">
+  <a href="#login-form" class="skip-nav">Skip to login form</a>
+
+  <div class="login-split">
+    <!-- Brand panel -->
+    <div class="login-brand" aria-hidden="true">
+      <div class="login-brand__content">
+        <div class="login-brand__logo">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect width="48" height="48" rx="12" fill="#F4A620"/>
+            <path d="M24 8L10 16V26C10 34.8 16.3 42.7 24 45C31.7 42.7 38 34.8 38 26V16L24 8Z" fill="#0F2B5B"/>
+            <path d="M20 24L23 27L28 21" stroke="#F4A620" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h1 class="login-brand__name">SampleTech Insurance</h1>
+        <p class="login-brand__tagline">Intelligent risk management for modern enterprises</p>
+        <ul class="login-brand__features">
+          <li>
+            <span class="login-brand__feature-icon">&#x2713;</span>
+            Multi-role portal access
+          </li>
+          <li>
+            <span class="login-brand__feature-icon">&#x2713;</span>
+            Real-time submission tracking
+          </li>
+          <li>
+            <span class="login-brand__feature-icon">&#x2713;</span>
+            Automated underwriting workflows
+          </li>
+          <li>
+            <span class="login-brand__feature-icon">&#x2713;</span>
+            Secure document management
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Form panel -->
+    <div class="login-form-panel">
+      <div class="login-card">
+        <div class="login-card__header">
+          <h2 class="login-card__title">Welcome back</h2>
+          <p class="login-card__subtitle">Sign in to your portal</p>
+        </div>
+
+        <form id="login-form" (ngSubmit)="submit()" novalidate>
+          @if (error()) {
+            <div class="login-error" role="alert" aria-live="polite">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M8 5v3.5M8 11h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+              {{ error() }}
+            </div>
+          }
+
+          <div class="form-group">
+            <label class="form-label" for="email">Email address</label>
+            <input
+              id="email"
+              class="form-control"
+              type="email"
+              [(ngModel)]="email"
+              name="email"
+              required
+              autocomplete="email"
+              placeholder="you@company.com"
+              aria-required="true"
+            />
+          </div>
+
+          <div class="form-group" style="margin-top: 1rem;">
+            <label class="form-label" for="password">Password</label>
+            <input
+              id="password"
+              class="form-control"
+              type="password"
+              [(ngModel)]="password"
+              name="password"
+              required
+              autocomplete="current-password"
+              placeholder="••••••••"
+              aria-required="true"
+            />
+          </div>
+
+          <button
+            type="submit"
+            class="btn btn--primary btn--lg login-submit"
+            [disabled]="loading()"
+            [attr.aria-busy]="loading()"
+          >
+            @if (loading()) {
+              <span class="spinner" aria-hidden="true"></span>
+              Signing in…
+            } @else {
+              Sign in
+            }
+          </button>
+        </form>
+
+        <!-- Dev convenience: role quick-login chips -->
+        <div class="login-devchips" aria-label="Developer quick login shortcuts">
+          <p class="login-devchips__label">Quick login (dev)</p>
+          <div class="login-devchips__list" role="group" aria-label="Role quick-login buttons">
+            @for (item of devRoles; track item.role) {
+              <button
+                type="button"
+                class="login-devchip"
+                (click)="quickLogin(item.role)"
+                [attr.aria-label]="'Quick login as ' + item.label"
+              >
+                {{ item.label }}
+              </button>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

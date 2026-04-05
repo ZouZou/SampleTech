@@ -1,0 +1,56 @@
+.policy-detail { max-width: var(--content-max-width); }
+
+.pd-back-link { display: inline-flex; align-items: center; font-size: var(--text-sm); color: var(--color-text-muted); text-decoration: none; margin-bottom: var(--space-2); transition: color var(--transition-fast); }
+.pd-back-link:hover { color: var(--color-primary); }
+
+.pd-layout {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: var(--space-5);
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .pd-layout { grid-template-columns: 1fr; }
+  .pd-sidebar { order: -1; }
+}
+
+.pd-main { display: flex; flex-direction: column; gap: var(--space-4); }
+
+.pd-section-title {
+  font-family: var(--font-heading);
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.pd-fields { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); }
+.pd-field-full { grid-column: 1 / -1; }
+.pd-field dt { font-size: var(--text-xs); color: var(--color-text-muted); font-weight: var(--weight-medium); margin-bottom: 2px; }
+.pd-field dd { font-size: var(--text-sm); font-weight: var(--weight-medium); color: var(--color-text); }
+
+@media (max-width: 600px) { .pd-fields { grid-template-columns: 1fr; } }
+
+/* Documents list */
+.pd-docs-list { display: flex; flex-direction: column; gap: var(--space-3); }
+.pd-doc-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: var(--color-bg);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+.pd-doc-info { display: flex; align-items: center; gap: var(--space-3); flex: 1; min-width: 0; }
+.pd-doc-icon { font-size: 1.4rem; flex-shrink: 0; }
+.pd-doc-name { font-size: var(--text-sm); font-weight: var(--weight-medium); color: var(--color-text); margin-bottom: 2px; }
+.pd-doc-meta { font-size: var(--text-xs); color: var(--color-text-muted); }
+
+/* Contacts */
+.pd-contact-list { display: flex; flex-direction: column; gap: var(--space-3); }
+.pd-contact__label { font-size: var(--text-xs); color: var(--color-text-muted); font-weight: var(--weight-medium); margin-bottom: 2px; }
+.pd-contact__value { font-size: var(--text-sm); color: var(--color-text); }

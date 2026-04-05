@@ -1,0 +1,84 @@
+<div class="portal-layout" [class.sidebar-collapsed]="!sidebarOpen()">
+  <a href="#main-content" class="skip-nav">Skip to main content</a>
+
+  <aside class="portal-sidebar" [class.portal-sidebar--open]="mobileMenuOpen()"
+    role="navigation" aria-label="Client portal navigation">
+    <div class="portal-sidebar__header">
+      <div class="portal-sidebar__logo" aria-hidden="true">
+        <svg width="32" height="32" viewBox="0 0 48 48" fill="none">
+          <rect width="48" height="48" rx="10" fill="#F4A620"/>
+          <path d="M24 8L10 16V26C10 34.8 16.3 42.7 24 45C31.7 42.7 38 34.8 38 26V16L24 8Z" fill="#0F2B5B"/>
+          <path d="M20 24L23 27L28 21" stroke="#F4A620" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      @if (sidebarOpen()) {
+        <div class="portal-sidebar__brand">
+          <span class="portal-sidebar__brand-name">SampleTech</span>
+          <span class="portal-sidebar__brand-role">Client Portal</span>
+        </div>
+      }
+      <button class="portal-sidebar__toggle" (click)="toggleSidebar()"
+        [attr.aria-expanded]="sidebarOpen()" aria-label="Toggle sidebar" aria-controls="client-nav">
+        <span>{{ sidebarOpen() ? '◀' : '▶' }}</span>
+      </button>
+    </div>
+
+    <nav id="client-nav" aria-label="Client navigation">
+      <ul class="portal-sidebar__nav" role="list">
+        @for (item of navItems; track item.path) {
+          <li>
+            <a [routerLink]="item.path" routerLinkActive="portal-sidebar__nav-item--active"
+              class="portal-sidebar__nav-item"
+              [attr.aria-label]="item.ariaLabel"
+              [attr.title]="!sidebarOpen() ? item.label : null"
+              (click)="mobileMenuOpen.set(false)">
+              <span class="portal-sidebar__nav-icon" aria-hidden="true">{{ item.icon }}</span>
+              @if (sidebarOpen()) { <span class="portal-sidebar__nav-label">{{ item.label }}</span> }
+            </a>
+          </li>
+        }
+      </ul>
+    </nav>
+
+    <div class="portal-sidebar__footer">
+      <div class="portal-sidebar__user">
+        <div class="portal-sidebar__avatar" aria-hidden="true">
+          {{ auth.currentUser()?.firstName?.charAt(0) }}{{ auth.currentUser()?.lastName?.charAt(0) }}
+        </div>
+        @if (sidebarOpen()) {
+          <div class="portal-sidebar__user-info">
+            <span class="portal-sidebar__user-name">{{ auth.currentUser()?.firstName }} {{ auth.currentUser()?.lastName }}</span>
+            <span class="portal-sidebar__user-role">Policyholder</span>
+          </div>
+        }
+      </div>
+      <button class="portal-sidebar__logout" (click)="auth.logout()"
+        [attr.title]="!sidebarOpen() ? 'Sign out' : null" aria-label="Sign out">
+        <span aria-hidden="true">&#x23FB;</span>
+        @if (sidebarOpen()) { <span>Sign out</span> }
+      </button>
+    </div>
+  </aside>
+
+  @if (mobileMenuOpen()) {
+    <div class="portal-overlay" (click)="mobileMenuOpen.set(false)" aria-hidden="true"></div>
+  }
+
+  <div class="portal-main">
+    <header class="portal-topbar" role="banner">
+      <button class="portal-topbar__menu-btn" (click)="toggleMobileMenu()"
+        aria-label="Open navigation menu" [attr.aria-expanded]="mobileMenuOpen()">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M2 5h16M2 10h16M2 15h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <div class="portal-topbar__breadcrumb">My Insurance Portal</div>
+      <div class="portal-topbar__actions">
+        <span class="badge badge--neutral">Policyholder</span>
+      </div>
+    </header>
+    <main id="main-content" class="portal-content" tabindex="-1">
+      <router-outlet />
+    </main>
+  </div>
+</div>

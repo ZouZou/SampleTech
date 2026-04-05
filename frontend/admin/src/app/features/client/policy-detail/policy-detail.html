@@ -1,0 +1,98 @@
+<div class="policy-detail">
+  <div class="page-header">
+    <div>
+      <a routerLink="/client/policies" class="pd-back-link" aria-label="Back to policies">
+        ← Back to Policies
+      </a>
+      <h1 class="page-header__title">{{ policy().type }}</h1>
+      <p class="page-header__subtitle">{{ policy().id }}</p>
+    </div>
+    <span class="badge badge--success" style="font-size: var(--text-sm); padding: var(--space-2) var(--space-3);">
+      {{ policy().status }}
+    </span>
+  </div>
+
+  <div class="pd-layout">
+    <!-- Policy Details -->
+    <div class="pd-main">
+      <section class="card" aria-labelledby="pd-policy-info">
+        <h2 id="pd-policy-info" class="pd-section-title">Policy Information</h2>
+        <dl class="pd-fields">
+          <div class="pd-field"><dt>Policy Number</dt><dd>{{ policy().policyNumber }}</dd></div>
+          <div class="pd-field"><dt>Insurer</dt><dd>{{ policy().insurer }}</dd></div>
+          <div class="pd-field"><dt>Effective Date</dt><dd>{{ policy().effective }}</dd></div>
+          <div class="pd-field"><dt>Expiry Date</dt><dd>{{ policy().expiry }}</dd></div>
+          <div class="pd-field"><dt>Annual Premium</dt><dd>{{ policy().premium }}</dd></div>
+          <div class="pd-field"><dt>Payment Frequency</dt><dd>{{ policy().paymentFrequency }}</dd></div>
+        </dl>
+      </section>
+
+      <section class="card" aria-labelledby="pd-coverage-info">
+        <h2 id="pd-coverage-info" class="pd-section-title">Coverage Summary</h2>
+        <dl class="pd-fields">
+          <div class="pd-field"><dt>Coverage Limit</dt><dd>{{ policy().coverageLimit }}</dd></div>
+          <div class="pd-field"><dt>Deductible</dt><dd>{{ policy().deductible }}</dd></div>
+          <div class="pd-field"><dt>Covered Vehicles</dt><dd>{{ policy().vehicles }}</dd></div>
+          <div class="pd-field"><dt>Authorized Drivers</dt><dd>{{ policy().drivers }}</dd></div>
+          <div class="pd-field pd-field--full"><dt>Territory</dt><dd>{{ policy().territory }}</dd></div>
+        </dl>
+      </section>
+
+      <!-- Documents -->
+      <section class="card" aria-labelledby="pd-docs">
+        <h2 id="pd-docs" class="pd-section-title">Policy Documents</h2>
+        <ul class="pd-docs-list" role="list">
+          @for (doc of documents(); track doc.name) {
+            <li class="pd-doc-item" role="listitem">
+              <div class="pd-doc-info">
+                <span class="pd-doc-icon" aria-hidden="true">📄</span>
+                <div>
+                  <p class="pd-doc-name">{{ doc.name }}</p>
+                  <p class="pd-doc-meta">{{ doc.type }} · {{ doc.size }} · {{ doc.date }}</p>
+                </div>
+              </div>
+              <button
+                class="btn btn--outline btn--sm"
+                type="button"
+                (click)="downloadDoc(doc)"
+                [disabled]="downloading() === doc.name"
+                [attr.aria-label]="'Download ' + doc.name"
+              >
+                @if (downloading() === doc.name) {
+                  <span class="spinner" aria-hidden="true"></span>
+                } @else {
+                  ↓ Download
+                }
+              </button>
+            </li>
+          }
+        </ul>
+      </section>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="pd-sidebar" aria-label="Policy contacts">
+      <div class="card">
+        <h2 class="pd-section-title">Your Contacts</h2>
+        <div class="pd-contact-list">
+          <div class="pd-contact">
+            <div class="pd-contact__label">Agent</div>
+            <div class="pd-contact__value">{{ policy().agent }}</div>
+          </div>
+          <div class="pd-contact">
+            <div class="pd-contact__label">Broker</div>
+            <div class="pd-contact__value">{{ policy().broker }}</div>
+          </div>
+          <div class="pd-contact">
+            <div class="pd-contact__label">Emergency Claims</div>
+            <div class="pd-contact__value">1-800-SAMPLE-1</div>
+          </div>
+        </div>
+        <a routerLink="/client/support" class="btn btn--outline" style="width:100%; margin-top: var(--space-4); justify-content: center;"
+          aria-label="Contact support about this policy">
+          Contact Support
+        </a>
+      </div>
+    </aside>
+  </div>
+</div>

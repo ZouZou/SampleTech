@@ -1,0 +1,61 @@
+<div class="client-list">
+  <div class="page-header">
+    <div>
+      <h1 class="page-header__title">Client List</h1>
+      <p class="page-header__subtitle">{{ filteredClients().length }} of {{ clients().length }} clients</p>
+    </div>
+    <button class="btn btn--primary" type="button" aria-label="Add a new client">+ Add Client</button>
+  </div>
+
+  <div class="card" style="margin-bottom: var(--space-4); padding: var(--space-4);">
+    <label class="sr-only" for="client-search">Search clients</label>
+    <input id="client-search" class="form-control" type="search"
+      placeholder="Search by name, email or industry..."
+      [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)" />
+  </div>
+
+  <div class="card" style="padding: 0; overflow: hidden;">
+    <div class="table-wrapper" role="region" aria-label="Client table" tabindex="0">
+      <table class="data-table" aria-label="Client list">
+        <thead>
+          <tr>
+            <th scope="col">Client Name</th>
+            <th scope="col">Contact Email</th>
+            <th scope="col">Phone</th>
+            <th scope="col">Industry</th>
+            <th scope="col">Revenue</th>
+            <th scope="col">Active Policies</th>
+            <th scope="col">Client Since</th>
+            <th scope="col"><span class="sr-only">Actions</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (client of filteredClients(); track client.id) {
+            <tr>
+              <td style="font-weight:500;">{{ client.name }}</td>
+              <td style="color:var(--color-text-muted);">{{ client.email }}</td>
+              <td style="color:var(--color-text-muted); white-space:nowrap;">{{ client.phone }}</td>
+              <td><span class="badge badge--neutral">{{ client.industry }}</span></td>
+              <td style="font-weight:500;">{{ client.revenue }}</td>
+              <td>
+                <span class="badge {{ client.activePolicies > 0 ? 'badge--success' : 'badge--neutral' }}">
+                  {{ client.activePolicies }}
+                </span>
+              </td>
+              <td style="color:var(--color-text-muted);">{{ client.since }}</td>
+              <td>
+                <button class="btn btn--ghost btn--sm" type="button"
+                  [attr.aria-label]="'View details for ' + client.name">View</button>
+                <button class="btn btn--outline btn--sm" type="button"
+                  [attr.aria-label]="'Submit quote for ' + client.name">Quote</button>
+              </td>
+            </tr>
+          }
+          @empty {
+            <tr><td colspan="8" style="text-align:center;color:var(--color-text-muted);padding:2.5rem !important;">No clients match your search.</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

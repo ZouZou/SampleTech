@@ -1,0 +1,101 @@
+<div class="submission-queue">
+  <div class="page-header">
+    <div>
+      <h1 class="page-header__title">Submission Queue</h1>
+      <p class="page-header__subtitle">{{ filteredAndSorted().length }} submissions</p>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="card sq-filters" style="margin-bottom: var(--space-4); padding: var(--space-4);">
+    <div class="sq-filters__row">
+      <div class="form-group" style="flex: 1;">
+        <label class="form-label" for="sq-search">Search submissions</label>
+        <input id="sq-search" class="form-control" type="search"
+          placeholder="Applicant name, ID, coverage type..."
+          [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)" />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="sq-status">Status</label>
+        <select id="sq-status" class="form-control"
+          [ngModel]="filterStatus()" (ngModelChange)="filterStatus.set($event)">
+          <option value="all">All Statuses</option>
+          <option value="New">New</option>
+          <option value="In Review">In Review</option>
+          <option value="Pending Info">Pending Info</option>
+          <option value="Quoted">Quoted</option>
+          <option value="Declined">Declined</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="card" style="padding: 0; overflow: hidden;">
+    <div class="table-wrapper" role="region" aria-label="Submission queue" tabindex="0">
+      <table class="data-table" aria-label="Insurance submissions">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">
+              <button class="sq-sort-btn" (click)="setSort('applicant')"
+                [attr.aria-label]="'Sort by applicant ' + sortIcon('applicant')">
+                Applicant {{ sortIcon('applicant') }}
+              </button>
+            </th>
+            <th scope="col">Coverage Type</th>
+            <th scope="col">Broker</th>
+            <th scope="col">
+              <button class="sq-sort-btn" (click)="setSort('received')"
+                [attr.aria-label]="'Sort by received date ' + sortIcon('received')">
+                Received {{ sortIcon('received') }}
+              </button>
+            </th>
+            <th scope="col">
+              <button class="sq-sort-btn" (click)="setSort('premium')"
+                [attr.aria-label]="'Sort by premium ' + sortIcon('premium')">
+                Est. Premium {{ sortIcon('premium') }}
+              </button>
+            </th>
+            <th scope="col">Priority</th>
+            <th scope="col">
+              <button class="sq-sort-btn" (click)="setSort('status')"
+                [attr.aria-label]="'Sort by status ' + sortIcon('status')">
+                Status {{ sortIcon('status') }}
+              </button>
+            </th>
+            <th scope="col"><span class="sr-only">Actions</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (sub of filteredAndSorted(); track sub.id) {
+            <tr>
+              <td><code class="sub-id">{{ sub.id }}</code></td>
+              <td style="font-weight: 500;">{{ sub.applicant }}</td>
+              <td>{{ sub.type }}</td>
+              <td style="color: var(--color-text-muted);">{{ sub.broker }}</td>
+              <td style="color: var(--color-text-muted); white-space: nowrap;">{{ sub.received }}</td>
+              <td style="font-weight: 500;">{{ formatPremium(sub.premium) }}</td>
+              <td><span class="badge {{ priorityBadge(sub.priority) }}">{{ sub.priority }}</span></td>
+              <td><span class="badge {{ statusBadge(sub.status) }}">{{ sub.status }}</span></td>
+              <td>
+                <a [routerLink]="['/underwriter/quotes']"
+                  class="btn btn--primary btn--sm"
+                  [attr.aria-label]="'Review submission ' + sub.id">
+                  Review
+                </a>
+              </td>
+            </tr>
+          }
+          @empty {
+            <tr>
+              <td colspan="9" style="text-align:center; color: var(--color-text-muted); padding: 2.5rem !important;">
+                No submissions match the current filters.
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

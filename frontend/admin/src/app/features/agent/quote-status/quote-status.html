@@ -1,0 +1,75 @@
+<div class="quote-status">
+  <div class="page-header">
+    <div>
+      <h1 class="page-header__title">Quote Status Tracker</h1>
+      <p class="page-header__subtitle">Track the progress of your submitted quotes</p>
+    </div>
+  </div>
+
+  <div class="qs-layout">
+    <!-- Quote list -->
+    <div class="qs-list" role="list" aria-label="Your quotes">
+      @for (q of quotes(); track q.id) {
+        <button
+          class="qs-card"
+          [class.qs-card--selected]="selectedId() === q.id"
+          (click)="selectedId.set(q.id)"
+          type="button"
+          [attr.aria-pressed]="selectedId() === q.id"
+          [attr.aria-label]="'View details for ' + q.client + ' ' + q.id"
+          role="listitem"
+        >
+          <div class="qs-card__top">
+            <code class="qs-card__id">{{ q.id }}</code>
+            <span class="badge {{ statusBadge(q.status) }}">{{ q.status }}</span>
+          </div>
+          <p class="qs-card__client">{{ q.client }}</p>
+          <p class="qs-card__type">{{ q.type }}</p>
+          <div class="qs-card__progress-bar" aria-hidden="true">
+            <div class="qs-card__progress-fill"
+              [style.width.%]="(milestonesDone(q) / q.milestones.length) * 100"></div>
+          </div>
+          <p class="qs-card__meta">Updated {{ q.lastUpdated }}</p>
+        </button>
+      }
+    </div>
+
+    <!-- Detail panel -->
+    <div class="qs-detail" aria-live="polite" aria-label="Quote details">
+      @if (selectedQuote()) {
+        <div class="card qs-detail-card">
+          <div class="qs-detail__header">
+            <div>
+              <h2 class="qs-detail__title">{{ selectedQuote()!.client }}</h2>
+              <p class="qs-detail__sub">{{ selectedQuote()!.type }} · {{ selectedQuote()!.id }}</p>
+            </div>
+            <span class="badge {{ statusBadge(selectedQuote()!.status) }}">{{ selectedQuote()!.status }}</span>
+          </div>
+
+          <div class="qs-timeline" role="list" aria-label="Quote processing milestones">
+            @for (m of selectedQuote()!.milestones; track m.label) {
+              <div class="qs-milestone" [class.qs-milestone--done]="m.done" role="listitem"
+                [attr.aria-label]="m.label + ': ' + (m.done ? 'Completed ' + m.date : 'Pending')">
+                <div class="qs-milestone__dot" aria-hidden="true">
+                  @if (m.done) { <span>&#x2713;</span> }
+                </div>
+                <div class="qs-milestone__content">
+                  <span class="qs-milestone__label">{{ m.label }}</span>
+                  @if (m.date) {
+                    <span class="qs-milestone__date">{{ m.date }}</span>
+                  } @else {
+                    <span class="qs-milestone__date qs-milestone__date--pending">Pending</span>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      } @else {
+        <div class="qs-detail-empty">
+          <p>Select a quote from the list to view its progress</p>
+        </div>
+      }
+    </div>
+  </div>
+</div>

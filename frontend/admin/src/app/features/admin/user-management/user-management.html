@@ -1,0 +1,75 @@
+<div class="user-management">
+  <div class="page-header">
+    <div>
+      <h1 class="page-header__title">User Management</h1>
+      <p class="page-header__subtitle">{{ filteredUsers().length }} of {{ users().length }} users</p>
+    </div>
+    <button class="btn btn--primary" type="button" aria-label="Invite new user">
+      + Invite User
+    </button>
+  </div>
+
+  <!-- Search -->
+  <div class="um-search card" style="margin-bottom: var(--space-4); padding: var(--space-4);">
+    <label for="user-search" class="sr-only">Search users</label>
+    <input
+      id="user-search"
+      class="form-control"
+      type="search"
+      placeholder="Search by name, email, role or tenant…"
+      [ngModel]="searchQuery()"
+      (ngModelChange)="searchQuery.set($event)"
+      aria-label="Search users"
+    />
+  </div>
+
+  <!-- Table -->
+  <div class="card" style="padding: 0; overflow: hidden;">
+    <div class="table-wrapper" role="region" aria-label="Users table" tabindex="0">
+      <table class="data-table" aria-label="User list">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Role</th>
+            <th scope="col">Tenant</th>
+            <th scope="col">Status</th>
+            <th scope="col">Last Login</th>
+            <th scope="col"><span class="sr-only">Actions</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (user of filteredUsers(); track user.id) {
+            <tr>
+              <td class="um-name">{{ user.name }}</td>
+              <td class="um-email">{{ user.email }}</td>
+              <td><span class="badge badge--neutral">{{ user.role }}</span></td>
+              <td class="um-tenant">{{ user.tenant }}</td>
+              <td>
+                <span class="badge {{ statusBadge(user.status) }}">{{ user.status }}</span>
+              </td>
+              <td class="um-login">{{ user.lastLogin }}</td>
+              <td class="um-actions">
+                <button
+                  class="btn btn--ghost btn--sm"
+                  type="button"
+                  [attr.aria-label]="'Edit user ' + user.name"
+                >Edit</button>
+                <button
+                  class="btn btn--ghost btn--sm um-actions__deactivate"
+                  type="button"
+                  [attr.aria-label]="'Deactivate user ' + user.name"
+                >{{ user.status === 'Active' ? 'Deactivate' : 'Activate' }}</button>
+              </td>
+            </tr>
+          }
+          @empty {
+            <tr>
+              <td colspan="7" class="um-empty">No users match your search.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

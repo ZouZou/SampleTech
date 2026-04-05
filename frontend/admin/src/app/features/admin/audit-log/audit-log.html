@@ -1,0 +1,79 @@
+<div class="audit-log">
+  <div class="page-header">
+    <div>
+      <h1 class="page-header__title">Audit Log</h1>
+      <p class="page-header__subtitle">{{ filteredEntries().length }} entries</p>
+    </div>
+    <button class="btn btn--outline btn--sm" type="button" aria-label="Export audit log to CSV">
+      Export CSV
+    </button>
+  </div>
+
+  <!-- Filters -->
+  <div class="card audit-filters" style="margin-bottom: var(--space-4); padding: var(--space-4);">
+    <div class="audit-filters__row">
+      <div class="form-group" style="flex: 1;">
+        <label class="form-label" for="filter-user">Filter by user</label>
+        <input
+          id="filter-user"
+          class="form-control"
+          type="search"
+          placeholder="Search by email..."
+          [ngModel]="filterUser()"
+          (ngModelChange)="filterUser.set($event)"
+        />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="filter-result">Result</label>
+        <select
+          id="filter-result"
+          class="form-control"
+          [ngModel]="filterResult()"
+          (ngModelChange)="filterResult.set($event)"
+        >
+          <option value="all">All</option>
+          <option value="success">Success</option>
+          <option value="failure">Failure</option>
+          <option value="warning">Warning</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Log Table -->
+  <div class="card" style="padding: 0; overflow: hidden;">
+    <div class="table-wrapper" role="region" aria-label="Audit log entries" tabindex="0">
+      <table class="data-table" aria-label="Audit log">
+        <thead>
+          <tr>
+            <th scope="col">Timestamp</th>
+            <th scope="col">User</th>
+            <th scope="col">Action</th>
+            <th scope="col">Resource</th>
+            <th scope="col">IP Address</th>
+            <th scope="col">Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (entry of filteredEntries(); track entry.id) {
+            <tr [class.audit-row--failure]="entry.result === 'failure'">
+              <td class="audit-timestamp">{{ entry.timestamp }}</td>
+              <td class="audit-user">{{ entry.user }}</td>
+              <td><code class="audit-action">{{ entry.action }}</code></td>
+              <td class="audit-resource">{{ entry.resource }}</td>
+              <td class="audit-ip">{{ entry.ip }}</td>
+              <td>
+                <span class="badge {{ resultBadge(entry.result) }}">{{ entry.result }}</span>
+              </td>
+            </tr>
+          }
+          @empty {
+            <tr>
+              <td colspan="6" class="audit-empty">No entries match the current filters.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

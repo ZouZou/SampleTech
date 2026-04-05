@@ -1,0 +1,18 @@
+<div class="shell">
+  <nav class="sidebar">
+    <div class="brand">SampleTech</div>
+    <ul class="nav-links">
+      <li><a routerLink="/dashboard" routerLinkActive="active">Dashboard</a></li>
+      <li><a routerLink="/policies" routerLinkActive="active">Policies</a></li>
+      <li><a routerLink="/claims" routerLinkActive="active">Claims</a></li>
+    </ul>
+    <div class="user-info">
+      <span>{{ auth.currentUser()?.firstName }} {{ auth.currentUser()?.lastName }}</span>
+      <span class="role">{{ auth.currentUser()?.role }}</span>
+      <button (click)="auth.logout()">Sign out</button>
+    </div>
+  </nav>
+  <main class="content">
+    <router-outlet />
+  </main>
+</div>

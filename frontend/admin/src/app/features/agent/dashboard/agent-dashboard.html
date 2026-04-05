@@ -1,0 +1,52 @@
+<div class="agent-dashboard">
+  <div class="page-header">
+    <div>
+      <h1 class="page-header__title">Agent Dashboard</h1>
+      <p class="page-header__subtitle">Your pipeline and activity overview</p>
+    </div>
+    <a routerLink="/agent/new-quote" class="btn btn--accent" aria-label="Submit a new quote">
+      + New Quote
+    </a>
+  </div>
+
+  <div class="stats-grid" role="list">
+    @for (stat of stats(); track stat.label) {
+      <div class="stat-card" role="listitem">
+        <div class="stat-card__label">{{ stat.label }}</div>
+        <div class="stat-card__value">{{ stat.value }}</div>
+        <div class="stat-card__change stat-card__change--{{ stat.direction }}">
+          {{ stat.change }}
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="card">
+    <div class="activity-header">
+      <h2 class="activity-header__title">Recent Submissions</h2>
+      <a routerLink="/agent/status" class="btn btn--ghost btn--sm">View all</a>
+    </div>
+    <table class="data-table" aria-label="Recent quote submissions">
+      <thead>
+        <tr>
+          <th scope="col">Submission ID</th>
+          <th scope="col">Client</th>
+          <th scope="col">Coverage Type</th>
+          <th scope="col">Submitted</th>
+          <th scope="col">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (q of recentQuotes(); track q.id) {
+          <tr>
+            <td><code class="sub-id">{{ q.id }}</code></td>
+            <td style="font-weight:500;">{{ q.client }}</td>
+            <td>{{ q.type }}</td>
+            <td style="color:var(--color-text-muted);">{{ q.submitted }}</td>
+            <td><span class="badge {{ statusBadge(q.status) }}">{{ q.status }}</span></td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

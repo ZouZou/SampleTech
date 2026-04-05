@@ -1,0 +1,49 @@
+<div class="client-dashboard">
+  <div class="page-header">
+    <div>
+      <h1 class="page-header__title">Welcome back</h1>
+      <p class="page-header__subtitle">Manage your active policies and get support</p>
+    </div>
+  </div>
+
+  <div class="client-stats-grid">
+    <div class="stat-card">
+      <div class="stat-card__label">Active Policies</div>
+      <div class="stat-card__value">{{ policies().length }}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card__label">Annual Premium</div>
+      <div class="stat-card__value">$394K</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card__label">Coverage Total</div>
+      <div class="stat-card__value">$9.5M+</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="activity-header">
+      <h2 class="activity-header__title">Active Policies</h2>
+      <a routerLink="/client/policies" class="btn btn--ghost btn--sm">View all</a>
+    </div>
+    <div class="policy-cards">
+      @for (pol of policies(); track pol.id) {
+        <a [routerLink]="['/client/policies', pol.id]" class="policy-card-link"
+          [attr.aria-label]="'View details for ' + pol.type">
+          <div class="policy-mini-card">
+            <div class="policy-mini-card__top">
+              <span class="badge badge--success">{{ pol.status }}</span>
+              <code class="policy-mini-card__id">{{ pol.id }}</code>
+            </div>
+            <h3 class="policy-mini-card__type">{{ pol.type }}</h3>
+            <div class="policy-mini-card__details">
+              <span>Coverage: {{ pol.coverage }}</span>
+              <span>Premium: {{ pol.premium }}</span>
+              <span>Expires: {{ pol.expiry }}</span>
+            </div>
+          </div>
+        </a>
+      }
+    </div>
+  </div>
+</div>

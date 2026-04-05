@@ -1,0 +1,284 @@
+<div class="quote-submission">
+  <div class="page-header">
+    <div>
+      <h1 class="page-header__title">New Quote Submission</h1>
+      <p class="page-header__subtitle">Complete all steps to submit a quote for underwriting review</p>
+    </div>
+  </div>
+
+  @if (submitted()) {
+    <!-- Success State -->
+    <div class="qs-success card" role="status" aria-live="assertive">
+      <div class="qs-success__icon" aria-hidden="true">&#x2713;</div>
+      <h2 class="qs-success__title">Quote Submitted Successfully!</h2>
+      <p class="qs-success__id">Submission ID: <strong>{{ submissionId() }}</strong></p>
+      <p class="qs-success__message">
+        Your quote has been submitted to the underwriting team. You can track its progress in the Quote Status page.
+      </p>
+      <div class="qs-success__actions">
+        <a routerLink="/agent/status" class="btn btn--primary">Track Status</a>
+        <a routerLink="/agent/new-quote" class="btn btn--outline">Submit Another</a>
+      </div>
+    </div>
+  } @else {
+    <!-- Step Indicator -->
+    <div class="qs-stepper" role="navigation" aria-label="Quote submission steps">
+      <div class="qs-stepper__progress" aria-hidden="true">
+        <div class="qs-stepper__bar">
+          <div class="qs-stepper__fill" [style.width.%]="progressPct()"></div>
+        </div>
+      </div>
+      <ol class="qs-stepper__steps" role="list">
+        @for (step of steps; track step.number) {
+          <li class="qs-stepper__step"
+            [class.qs-stepper__step--active]="currentStep() === step.number"
+            [class.qs-stepper__step--complete]="currentStep() > step.number"
+            [attr.aria-current]="currentStep() === step.number ? 'step' : null">
+            <span class="qs-stepper__step-num" aria-hidden="true">
+              @if (currentStep() > step.number) { &#x2713; } @else { {{ step.number }} }
+            </span>
+            <span class="qs-stepper__step-label">{{ step.label }}</span>
+          </li>
+        }
+      </ol>
+    </div>
+
+    <!-- Step 1: Applicant Info -->
+    @if (currentStep() === 1) {
+      <section class="card qs-step" aria-labelledby="step1-heading">
+        <h2 id="step1-heading" class="qs-step__title">Step 1 — Applicant Information</h2>
+        <form [formGroup]="applicantForm" novalidate>
+          <div class="qs-grid">
+            <div class="form-group">
+              <label class="form-label" for="businessName">Business Name <span aria-label="required">*</span></label>
+              <input id="businessName" class="form-control" type="text" formControlName="businessName"
+                placeholder="e.g. Acme Corp Ltd." />
+              @if (applicantForm.get('businessName')?.invalid && applicantForm.get('businessName')?.touched) {
+                <span class="form-error" role="alert">Business name is required</span>
+              }
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="industry">Industry <span aria-label="required">*</span></label>
+              <select id="industry" class="form-control" formControlName="industry">
+                <option value="">Select industry...</option>
+                <option>Manufacturing</option>
+                <option>Retail</option>
+                <option>Healthcare</option>
+                <option>Technology</option>
+                <option>Construction</option>
+                <option>Transportation</option>
+                <option>Food & Beverage</option>
+                <option>Education</option>
+                <option>Professional Services</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="annualRevenue">Annual Revenue <span aria-label="required">*</span></label>
+              <select id="annualRevenue" class="form-control" formControlName="annualRevenue">
+                <option value="">Select range...</option>
+                <option>Under $1M</option>
+                <option>$1M – $5M</option>
+                <option>$5M – $25M</option>
+                <option>$25M – $100M</option>
+                <option>$100M – $500M</option>
+                <option>Over $500M</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="employees">Number of Employees <span aria-label="required">*</span></label>
+              <input id="employees" class="form-control" type="number" formControlName="employees"
+                min="1" placeholder="e.g. 150" />
+            </div>
+            <div class="form-group qs-full">
+              <label class="form-label" for="address">Primary Business Address <span aria-label="required">*</span></label>
+              <input id="address" class="form-control" type="text" formControlName="address"
+                placeholder="Street, City, State, ZIP" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="contactName">Primary Contact <span aria-label="required">*</span></label>
+              <input id="contactName" class="form-control" type="text" formControlName="contactName"
+                placeholder="Full name" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="contactEmail">Contact Email <span aria-label="required">*</span></label>
+              <input id="contactEmail" class="form-control" type="email" formControlName="contactEmail"
+                placeholder="contact@company.com" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="contactPhone">Contact Phone <span aria-label="required">*</span></label>
+              <input id="contactPhone" class="form-control" type="tel" formControlName="contactPhone"
+                placeholder="(555) 555-5555" />
+            </div>
+          </div>
+        </form>
+      </section>
+    }
+
+    <!-- Step 2: Coverage Details -->
+    @if (currentStep() === 2) {
+      <section class="card qs-step" aria-labelledby="step2-heading">
+        <h2 id="step2-heading" class="qs-step__title">Step 2 — Coverage Details</h2>
+        <form [formGroup]="coverageForm" novalidate>
+          <div class="qs-grid">
+            <div class="form-group">
+              <label class="form-label" for="coverageType">Coverage Type <span aria-label="required">*</span></label>
+              <select id="coverageType" class="form-control" formControlName="coverageType">
+                <option value="">Select coverage...</option>
+                <option>Commercial Property</option>
+                <option>General Liability</option>
+                <option>Workers Compensation</option>
+                <option>Commercial Auto / Fleet</option>
+                <option>Professional Liability (E&O)</option>
+                <option>Cyber Liability</option>
+                <option>Directors & Officers (D&O)</option>
+                <option>Marine Cargo</option>
+                <option>Product Liability</option>
+                <option>Medical Malpractice</option>
+                <option>Construction All-Risk</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="coverageLimit">Coverage Limit <span aria-label="required">*</span></label>
+              <select id="coverageLimit" class="form-control" formControlName="coverageLimit">
+                <option value="">Select limit...</option>
+                <option>$500,000</option>
+                <option>$1,000,000</option>
+                <option>$2,000,000</option>
+                <option>$5,000,000</option>
+                <option>$10,000,000</option>
+                <option>$25,000,000+</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="effectiveDate">Effective Date <span aria-label="required">*</span></label>
+              <input id="effectiveDate" class="form-control" type="date" formControlName="effectiveDate" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="expirationDate">Expiration Date <span aria-label="required">*</span></label>
+              <input id="expirationDate" class="form-control" type="date" formControlName="expirationDate" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="deductible">Deductible <span aria-label="required">*</span></label>
+              <select id="deductible" class="form-control" formControlName="deductible">
+                <option value="">Select deductible...</option>
+                <option>$1,000</option>
+                <option>$2,500</option>
+                <option>$5,000</option>
+                <option>$10,000</option>
+                <option>$25,000</option>
+                <option>$50,000</option>
+                <option>$100,000+</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="priorInsurer">Prior Insurer (if any)</label>
+              <input id="priorInsurer" class="form-control" type="text" formControlName="priorInsurer"
+                placeholder="e.g. Travelers, Chubb" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="priorPremium">Prior Year Premium (if any)</label>
+              <input id="priorPremium" class="form-control" type="text" formControlName="priorPremium"
+                placeholder="e.g. $45,000" />
+            </div>
+            <div class="form-group qs-full">
+              <label class="form-label" for="additionalNotes">Additional Notes / Special Conditions</label>
+              <textarea id="additionalNotes" class="form-control" formControlName="additionalNotes"
+                rows="4" placeholder="Any special risks, exclusions needed, or notes for the underwriter..."></textarea>
+            </div>
+          </div>
+        </form>
+      </section>
+    }
+
+    <!-- Step 3: Review -->
+    @if (currentStep() === 3) {
+      <section class="card qs-step" aria-labelledby="step3-heading">
+        <h2 id="step3-heading" class="qs-step__title">Step 3 — Review & Submit</h2>
+        <div class="qs-review">
+          <div class="qs-review-section">
+            <h3 class="qs-review-section__title">Applicant Information</h3>
+            <dl class="qs-review-fields">
+              <div class="qs-review-field">
+                <dt>Business Name</dt>
+                <dd>{{ applicantForm.get('businessName')?.value || '—' }}</dd>
+              </div>
+              <div class="qs-review-field">
+                <dt>Industry</dt>
+                <dd>{{ applicantForm.get('industry')?.value || '—' }}</dd>
+              </div>
+              <div class="qs-review-field">
+                <dt>Annual Revenue</dt>
+                <dd>{{ applicantForm.get('annualRevenue')?.value || '—' }}</dd>
+              </div>
+              <div class="qs-review-field">
+                <dt>Employees</dt>
+                <dd>{{ applicantForm.get('employees')?.value || '—' }}</dd>
+              </div>
+              <div class="qs-review-field">
+                <dt>Address</dt>
+                <dd>{{ applicantForm.get('address')?.value || '—' }}</dd>
+              </div>
+              <div class="qs-review-field">
+                <dt>Contact</dt>
+                <dd>{{ applicantForm.get('contactName')?.value }} — {{ applicantForm.get('contactEmail')?.value }}</dd>
+              </div>
+            </dl>
+          </div>
+          <div class="qs-review-section">
+            <h3 class="qs-review-section__title">Coverage Details</h3>
+            <dl class="qs-review-fields">
+              <div class="qs-review-field">
+                <dt>Coverage Type</dt>
+                <dd>{{ coverageForm.get('coverageType')?.value || '—' }}</dd>
+              </div>
+              <div class="qs-review-field">
+                <dt>Coverage Limit</dt>
+                <dd>{{ coverageForm.get('coverageLimit')?.value || '—' }}</dd>
+              </div>
+              <div class="qs-review-field">
+                <dt>Deductible</dt>
+                <dd>{{ coverageForm.get('deductible')?.value || '—' }}</dd>
+              </div>
+              <div class="qs-review-field">
+                <dt>Policy Period</dt>
+                <dd>{{ coverageForm.get('effectiveDate')?.value }} to {{ coverageForm.get('expirationDate')?.value }}</dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+      </section>
+    }
+
+    <!-- Navigation buttons -->
+    <div class="qs-nav-btns">
+      @if (currentStep() > 1) {
+        <button class="btn btn--outline" type="button" (click)="prevStep()"
+          aria-label="Go to previous step">
+          ← Previous
+        </button>
+      } @else {
+        <span></span>
+      }
+      @if (currentStep() < totalSteps) {
+        <button class="btn btn--primary" type="button" (click)="nextStep()"
+          [disabled]="!canProceed()"
+          aria-label="Go to next step">
+          Next →
+        </button>
+      } @else {
+        <button class="btn btn--accent" type="button" (click)="submitQuote()"
+          [disabled]="submitting()"
+          [attr.aria-busy]="submitting()"
+          aria-label="Submit quote to underwriting">
+          @if (submitting()) {
+            <span class="spinner" aria-hidden="true"></span>
+            Submitting...
+          } @else {
+            Submit Quote
+          }
+        </button>
+      }
+    </div>
+  }
+</div>

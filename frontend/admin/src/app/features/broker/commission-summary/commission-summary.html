@@ -1,0 +1,79 @@
+<div class="commission-summary">
+  <div class="page-header">
+    <div>
+      <h1 class="page-header__title">Commission Summary</h1>
+      <p class="page-header__subtitle">{{ filtered().length }} records · Total: <strong>{{ fmt(totalEarned()) }}</strong></p>
+    </div>
+    <button class="btn btn--outline btn--sm" type="button" aria-label="Export commission report">Export CSV</button>
+  </div>
+
+  <div class="card cs-filters" style="margin-bottom: var(--space-4); padding: var(--space-4);">
+    <div class="cs-filters__row">
+      <div class="form-group">
+        <label class="form-label" for="cs-agency">Agency</label>
+        <select id="cs-agency" class="form-control"
+          [ngModel]="filterAgency()" (ngModelChange)="filterAgency.set($event)">
+          <option value="all">All Agencies</option>
+          @for (a of agencies; track a) {
+            <option [value]="a">{{ a }}</option>
+          }
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="cs-status">Payment Status</label>
+        <select id="cs-status" class="form-control"
+          [ngModel]="filterStatus()" (ngModelChange)="filterStatus.set($event)">
+          <option value="all">All Statuses</option>
+          <option value="Paid">Paid</option>
+          <option value="Pending">Pending</option>
+          <option value="Processing">Processing</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="padding: 0; overflow: hidden;">
+    <div style="overflow-x: auto;">
+      <table class="data-table" aria-label="Commission records">
+        <thead>
+          <tr>
+            <th scope="col">Agency</th>
+            <th scope="col">Policy ID</th>
+            <th scope="col">Client</th>
+            <th scope="col">Line</th>
+            <th scope="col">Premium</th>
+            <th scope="col">Rate</th>
+            <th scope="col">Commission</th>
+            <th scope="col">Month</th>
+            <th scope="col">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of filtered(); track row.id) {
+            <tr>
+              <td style="font-weight:500;">{{ row.agency }}</td>
+              <td><code class="sub-id">{{ row.policy }}</code></td>
+              <td>{{ row.client }}</td>
+              <td>{{ row.line }}</td>
+              <td>{{ fmt(row.premium) }}</td>
+              <td>{{ row.commissionRate }}%</td>
+              <td style="font-weight:600; color: var(--color-success);">{{ fmt(row.earned) }}</td>
+              <td style="color: var(--color-text-muted);">{{ row.month }}</td>
+              <td><span class="badge {{ statusBadge(row.status) }}">{{ row.status }}</span></td>
+            </tr>
+          }
+          @empty {
+            <tr><td colspan="9" style="text-align:center;color:var(--color-text-muted);padding:2.5rem !important;">No records match the filters.</td></tr>
+          }
+        </tbody>
+        <tfoot>
+          <tr class="cs-total-row">
+            <td colspan="6" style="font-weight:600;">Total Earned</td>
+            <td style="font-weight:700; color: var(--color-success); font-size: var(--text-base);">{{ fmt(totalEarned()) }}</td>
+            <td colspan="2"></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</div>

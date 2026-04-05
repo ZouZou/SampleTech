@@ -1,0 +1,109 @@
+<div class="quote-detail">
+  <div class="page-header">
+    <div>
+      <a routerLink="/underwriter/queue" class="qd-back-link" aria-label="Back to queue">
+        ← Back to Queue
+      </a>
+      <h1 class="page-header__title">{{ quote().id }}</h1>
+      <p class="page-header__subtitle">{{ quote().applicant }} · {{ quote().coverageType }}</p>
+    </div>
+    <div class="qd-meta-badges">
+      <span class="badge badge--warning">In Review</span>
+      <span class="badge badge--danger">Due: {{ quote().deadline }}</span>
+    </div>
+  </div>
+
+  <!-- Decision banner -->
+  @if (decision() === 'approved') {
+    <div class="alert alert--success" role="status" aria-live="assertive">
+      <span aria-hidden="true">&#x2713;</span>
+      Quote <strong>{{ quote().id }}</strong> has been <strong>approved</strong>. The broker has been notified.
+    </div>
+  }
+  @if (decision() === 'declined') {
+    <div class="alert alert--danger" role="status" aria-live="assertive">
+      <span aria-hidden="true">&#x2715;</span>
+      Quote <strong>{{ quote().id }}</strong> has been <strong>declined</strong>. The broker has been notified.
+    </div>
+  }
+
+  <div class="qd-layout">
+    <!-- Main detail -->
+    <div class="qd-main">
+      @for (section of sections(); track section.label) {
+        <section class="card qd-section" [attr.aria-labelledby]="'section-' + section.label.replace(' ', '-')">
+          <h2 [id]="'section-' + section.label.replace(' ', '-')" class="qd-section__title">
+            {{ section.label }}
+          </h2>
+          <dl class="qd-fields">
+            @for (field of section.fields; track field.key) {
+              <div class="qd-field">
+                <dt class="qd-field__key">{{ field.key }}</dt>
+                <dd class="qd-field__value">{{ field.value }}</dd>
+              </div>
+            }
+          </dl>
+        </section>
+      }
+    </div>
+
+    <!-- Action sidebar -->
+    <aside class="qd-sidebar" aria-label="Underwriting decision">
+      <div class="card qd-action-card">
+        <h2 class="qd-action-card__title">Underwriting Decision</h2>
+        <div class="qd-action-card__summary">
+          <div class="qd-summary-row">
+            <span>Est. Premium</span>
+            <strong>{{ quote().estimatedPremium }}</strong>
+          </div>
+          <div class="qd-summary-row">
+            <span>Policy Period</span>
+            <span>{{ quote().policyPeriod }}</span>
+          </div>
+          <div class="qd-summary-row">
+            <span>Broker</span>
+            <span>{{ quote().broker }}</span>
+          </div>
+        </div>
+
+        @if (decision() === 'pending') {
+          <div class="qd-decision-btns">
+            <button
+              class="btn btn--primary"
+              type="button"
+              (click)="approve()"
+              [disabled]="submitting()"
+              aria-label="Approve this quote"
+            >
+              @if (submitting()) { <span class="spinner" aria-hidden="true"></span> }
+              Approve Quote
+            </button>
+            <button
+              class="btn btn--danger"
+              type="button"
+              (click)="decline()"
+              [disabled]="submitting()"
+              aria-label="Decline this quote"
+            >
+              Decline Quote
+            </button>
+            <button
+              class="btn btn--outline"
+              type="button"
+              aria-label="Request additional information from broker"
+            >
+              Request Info
+            </button>
+          </div>
+        } @else {
+          <div class="qd-decided">
+            <span class="badge {{ decision() === 'approved' ? 'badge--success' : 'badge--danger' }}" style="font-size: var(--text-sm); padding: var(--space-2) var(--space-3);">
+              {{ decision() === 'approved' ? 'Approved' : 'Declined' }}
+            </span>
+            <p class="qd-decided__info">Decision recorded on April 4, 2026</p>
+          </div>
+        }
+      </div>
+    </aside>
+  </div>
+</div>

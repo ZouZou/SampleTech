@@ -1,0 +1,57 @@
+<div class="uw-dashboard">
+  <div class="page-header">
+    <div>
+      <h1 class="page-header__title">Underwriter Dashboard</h1>
+      <p class="page-header__subtitle">Your workload overview for April 4, 2026</p>
+    </div>
+    <a routerLink="/underwriter/queue" class="btn btn--primary">View Full Queue</a>
+  </div>
+
+  <div class="stats-grid" role="list">
+    @for (stat of stats(); track stat.label) {
+      <div class="stat-card" role="listitem">
+        <div class="stat-card__label">{{ stat.label }}</div>
+        <div class="stat-card__value">{{ stat.value }}</div>
+        <div class="stat-card__change stat-card__change--{{ stat.direction }}">
+          {{ stat.change }}
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="card">
+    <div class="activity-header">
+      <h2 class="activity-header__title">Urgent — Decision Required Today</h2>
+      <span class="badge badge--danger">{{ urgentItems().length }} items</span>
+    </div>
+    <table class="data-table" aria-label="Urgent submissions requiring decision">
+      <thead>
+        <tr>
+          <th scope="col">Submission ID</th>
+          <th scope="col">Applicant</th>
+          <th scope="col">Coverage Type</th>
+          <th scope="col">Est. Premium</th>
+          <th scope="col">Deadline</th>
+          <th scope="col"><span class="sr-only">Action</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of urgentItems(); track item.id) {
+          <tr>
+            <td><code class="audit-action">{{ item.id }}</code></td>
+            <td style="font-weight: 500;">{{ item.name }}</td>
+            <td>{{ item.type }}</td>
+            <td>{{ item.premium }}</td>
+            <td><span class="badge badge--warning">{{ item.due }}</span></td>
+            <td>
+              <a [routerLink]="['/underwriter/quotes']" class="btn btn--primary btn--sm"
+                [attr.aria-label]="'Review submission for ' + item.name">
+                Review
+              </a>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

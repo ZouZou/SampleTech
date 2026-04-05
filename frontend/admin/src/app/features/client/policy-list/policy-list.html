@@ -1,0 +1,65 @@
+<div class="policy-list">
+  <div class="page-header">
+    <div>
+      <h1 class="page-header__title">My Policies</h1>
+      <p class="page-header__subtitle">{{ policies().length }} total policies</p>
+    </div>
+  </div>
+
+  <div class="policy-grid" role="list" aria-label="Your insurance policies">
+    @for (pol of policies(); track pol.id) {
+      <article class="policy-card card" role="listitem" [class.policy-card--inactive]="pol.status !== 'Active'">
+        <div class="policy-card__header">
+          <div class="policy-card__icon" aria-hidden="true">
+            @if (pol.type.includes('Auto')) { 🚗 }
+            @else if (pol.type.includes('Cyber')) { 💻 }
+            @else if (pol.type.includes('Workers')) { 👷 }
+            @else if (pol.type.includes('Property')) { 🏢 }
+            @else { 📋 }
+          </div>
+          <div class="policy-card__title-block">
+            <h2 class="policy-card__type">{{ pol.type }}</h2>
+            <code class="policy-card__id">{{ pol.id }}</code>
+          </div>
+          <span class="badge {{ statusBadge(pol.status) }}">{{ pol.status }}</span>
+        </div>
+
+        <dl class="policy-card__details">
+          <div class="policy-card__detail">
+            <dt>Coverage Limit</dt>
+            <dd>{{ pol.coverage }}</dd>
+          </div>
+          <div class="policy-card__detail">
+            <dt>Annual Premium</dt>
+            <dd>{{ pol.premium }}</dd>
+          </div>
+          <div class="policy-card__detail">
+            <dt>Deductible</dt>
+            <dd>{{ pol.deductible }}</dd>
+          </div>
+          <div class="policy-card__detail">
+            <dt>Policy Period</dt>
+            <dd>{{ pol.effective }} – {{ pol.expiry }}</dd>
+          </div>
+          <div class="policy-card__detail">
+            <dt>Insurer</dt>
+            <dd>{{ pol.insurer }}</dd>
+          </div>
+        </dl>
+
+        <div class="policy-card__actions">
+          <a [routerLink]="['/client/policies', pol.id]" class="btn btn--primary btn--sm"
+            [attr.aria-label]="'View details for ' + pol.type">
+            View Details
+          </a>
+          @if (pol.status === 'Active') {
+            <button class="btn btn--outline btn--sm" type="button"
+              [attr.aria-label]="'Download certificate for ' + pol.type">
+              Download Certificate
+            </button>
+          }
+        </div>
+      </article>
+    }
+  </div>
+</div>

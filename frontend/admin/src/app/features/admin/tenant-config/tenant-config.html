@@ -1,0 +1,132 @@
+<div class="tenant-config">
+  <div class="page-header">
+    <div>
+      <h1 class="page-header__title">Tenant Configuration</h1>
+      <p class="page-header__subtitle">Manage platform settings and tenant preferences</p>
+    </div>
+  </div>
+
+  @if (saved()) {
+    <div class="alert alert--success" role="status" aria-live="polite">
+      <span aria-hidden="true">&#x2713;</span> Configuration saved successfully.
+    </div>
+  }
+
+  <form (ngSubmit)="save()" novalidate>
+    <!-- General Settings Panel -->
+    <section class="config-panel card" aria-labelledby="general-settings-heading">
+      <h2 id="general-settings-heading" class="config-panel__title">General Settings</h2>
+      <div class="config-grid">
+        <div class="form-group">
+          <label class="form-label" for="tenantName">Tenant Name</label>
+          <input id="tenantName" class="form-control" type="text"
+            [ngModel]="tenantName()" (ngModelChange)="tenantName.set($event)"
+            name="tenantName" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="domain">Domain</label>
+          <input id="domain" class="form-control" type="text"
+            [ngModel]="domain()" (ngModelChange)="domain.set($event)"
+            name="domain" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="maxUsers">Max Users</label>
+          <input id="maxUsers" class="form-control" type="number"
+            [ngModel]="maxUsers()" (ngModelChange)="maxUsers.set($event)"
+            name="maxUsers" min="1" max="10000" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="supportEmail">Support Email</label>
+          <input id="supportEmail" class="form-control" type="email"
+            [ngModel]="supportEmail()" (ngModelChange)="supportEmail.set($event)"
+            name="supportEmail" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Security Panel -->
+    <section class="config-panel card" aria-labelledby="security-heading">
+      <h2 id="security-heading" class="config-panel__title">Security</h2>
+      <div class="config-grid">
+        <div class="form-group">
+          <label class="form-label" for="sessionTimeout">Session Timeout (minutes)</label>
+          <input id="sessionTimeout" class="form-control" type="number"
+            [ngModel]="sessionTimeoutMinutes()" (ngModelChange)="sessionTimeoutMinutes.set($event)"
+            name="sessionTimeout" min="5" max="480" />
+          <span class="form-hint">Minimum 5 minutes, maximum 480 minutes (8 hours)</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="allowedIp">Allowed IP Ranges (CIDR)</label>
+          <input id="allowedIp" class="form-control" type="text"
+            [ngModel]="allowedIpRanges()" (ngModelChange)="allowedIpRanges.set($event)"
+            name="allowedIp" placeholder="0.0.0.0/0 for all" />
+          <span class="form-hint">Comma-separated list of CIDR ranges</span>
+        </div>
+        <div class="form-group config-toggle">
+          <div class="toggle-row">
+            <div>
+              <p class="form-label">Multi-Factor Authentication</p>
+              <span class="form-hint">Require MFA for all users in this tenant</span>
+            </div>
+            <label class="toggle-switch" [attr.aria-label]="'MFA is ' + (mfaEnabled() ? 'enabled' : 'disabled')">
+              <input
+                id="mfaEnabled"
+                type="checkbox"
+                [ngModel]="mfaEnabled()" (ngModelChange)="mfaEnabled.set($event)"
+                name="mfaEnabled"
+                role="switch"
+                [attr.aria-checked]="mfaEnabled()"
+              />
+              <span class="toggle-slider" aria-hidden="true"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Branding Panel -->
+    <section class="config-panel card" aria-labelledby="branding-heading">
+      <h2 id="branding-heading" class="config-panel__title">Branding</h2>
+      <div class="config-grid">
+        <div class="form-group">
+          <label class="form-label" for="logoUrl">Logo URL</label>
+          <input id="logoUrl" class="form-control" type="url"
+            [ngModel]="logoUrl()" (ngModelChange)="logoUrl.set($event)"
+            name="logoUrl" placeholder="https://cdn.example.com/logo.png" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="primaryColor">Primary Color</label>
+          <div class="color-input-row">
+            <input id="primaryColor" class="form-control" type="text"
+              [ngModel]="primaryColor()" (ngModelChange)="primaryColor.set($event)"
+              name="primaryColor" placeholder="#0F2B5B" />
+            <input
+              type="color"
+              class="color-picker"
+              [ngModel]="primaryColor()" (ngModelChange)="primaryColor.set($event)"
+              name="primaryColorPicker"
+              aria-label="Color picker for primary color"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="config-actions">
+      <button type="button" class="btn btn--outline">Discard Changes</button>
+      <button
+        type="submit"
+        class="btn btn--primary"
+        [disabled]="saving()"
+        [attr.aria-busy]="saving()"
+      >
+        @if (saving()) {
+          <span class="spinner" aria-hidden="true"></span>
+          Saving...
+        } @else {
+          Save Configuration
+        }
+      </button>
+    </div>
+  </form>
+</div>

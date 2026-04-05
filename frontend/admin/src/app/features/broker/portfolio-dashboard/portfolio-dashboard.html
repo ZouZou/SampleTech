@@ -1,0 +1,61 @@
+<div class="portfolio-dashboard">
+  <div class="page-header">
+    <div>
+      <h1 class="page-header__title">Portfolio Dashboard</h1>
+      <p class="page-header__subtitle">Consolidated view across all managed agencies</p>
+    </div>
+    <button class="btn btn--outline btn--sm" type="button" aria-label="Export portfolio report">Export Report</button>
+  </div>
+
+  <!-- KPI grid -->
+  <div class="portfolio-kpi-grid" role="list" aria-label="Portfolio KPIs">
+    @for (kpi of kpis(); track kpi.label) {
+      <div class="stat-card" role="listitem">
+        <div class="stat-card__label">{{ kpi.label }}</div>
+        <div class="stat-card__value">{{ kpi.value }}</div>
+        <div class="stat-card__change stat-card__change--{{ kpi.dir }}">{{ kpi.change }}</div>
+      </div>
+    }
+  </div>
+
+  <!-- Lines of business table -->
+  <div class="card" style="margin-top: var(--space-4);">
+    <h2 class="portfolio-section-title">Breakdown by Line of Business</h2>
+    <div style="overflow-x:auto;">
+      <table class="data-table" aria-label="Portfolio breakdown by line of business">
+        <thead>
+          <tr>
+            <th scope="col">Line of Business</th>
+            <th scope="col">GWP (YTD)</th>
+            <th scope="col">Policy Count</th>
+            <th scope="col">% of Portfolio</th>
+            <th scope="col">Renewal Rate</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (line of linesOfBusiness(); track line.line) {
+            <tr>
+              <td style="font-weight:500;">{{ line.line }}</td>
+              <td style="font-weight:500; color: var(--color-primary);">{{ line.gwp }}</td>
+              <td>{{ line.policyCount }}</td>
+              <td>
+                <div class="portfolio-bar-cell">
+                  <div class="portfolio-bar">
+                    <div class="portfolio-bar__fill" [style.width.%]="line.pctOfTotal"
+                      [attr.aria-label]="line.pctOfTotal + '% of portfolio'"></div>
+                  </div>
+                  <span>{{ line.pctOfTotal }}%</span>
+                </div>
+              </td>
+              <td>
+                <span class="badge {{ line.renewalRate >= '90%' ? 'badge--success' : 'badge--warning' }}">
+                  {{ line.renewalRate }}
+                </span>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

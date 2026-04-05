@@ -1,0 +1,51 @@
+<div class="agency-overview">
+  <div class="page-header">
+    <div>
+      <h1 class="page-header__title">Agency Overview</h1>
+      <p class="page-header__subtitle">{{ agencies().length }} managed agencies</p>
+    </div>
+  </div>
+
+  <div class="agency-grid" role="list" aria-label="Agency cards">
+    @for (agency of agencies(); track agency.id) {
+      <article class="agency-card card" role="listitem" [attr.aria-label]="agency.name + ' agency details'">
+        <div class="agency-card__header">
+          <div class="agency-card__icon" aria-hidden="true">{{ agency.name.charAt(0) }}</div>
+          <div class="agency-card__title-group">
+            <h2 class="agency-card__name">{{ agency.name }}</h2>
+            <span class="agency-card__state">{{ agency.state }}</span>
+          </div>
+          <span class="badge {{ statusBadge(agency.status) }}">{{ agency.status }}</span>
+        </div>
+        <dl class="agency-card__stats">
+          <div class="agency-card__stat">
+            <dt>Agents</dt>
+            <dd>{{ agency.agents }}</dd>
+          </div>
+          <div class="agency-card__stat">
+            <dt>GWP (YTD)</dt>
+            <dd>{{ agency.gwp }}</dd>
+          </div>
+          <div class="agency-card__stat">
+            <dt>Policies</dt>
+            <dd>{{ agency.policies }}</dd>
+          </div>
+          <div class="agency-card__stat">
+            <dt>Commission</dt>
+            <dd class="agency-card__commission">{{ agency.commission }}</dd>
+          </div>
+        </dl>
+        <div class="agency-card__growth">
+          <span>YoY Growth:</span>
+          <span class="agency-card__growth-value" [class.up]="agency.growth.startsWith('+')" [class.down]="agency.growth.startsWith('-')">
+            {{ agency.growth }}
+          </span>
+        </div>
+        <button class="btn btn--outline btn--sm agency-card__action" type="button"
+          [attr.aria-label]="'View full details for ' + agency.name">
+          View Details
+        </button>
+      </article>
+    }
+  </div>
+</div>
