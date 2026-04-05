@@ -9,6 +9,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Tenant> Tenants => Set<Tenant>();
     public DbSet<User> Users => Set<User>();
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+    public DbSet<PasswordResetToken> PasswordResetTokens => Set<PasswordResetToken>();
 
     // ── Audit ──────────────────────────────────────────────────────────────────
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
@@ -68,6 +69,18 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             e.HasOne(r => r.User)
              .WithMany(u => u.RefreshTokens)
              .HasForeignKey(r => r.UserId)
+             .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        // ── PasswordResetToken ──────────────────────────────────────────────────
+        modelBuilder.Entity<PasswordResetToken>(e =>
+        {
+            e.HasKey(p => p.Id);
+            e.HasIndex(p => p.Token).IsUnique();
+            e.Property(p => p.Token).HasMaxLength(512).IsRequired();
+            e.HasOne(p => p.User)
+             .WithMany()
+             .HasForeignKey(p => p.UserId)
              .OnDelete(DeleteBehavior.Cascade);
         });
 

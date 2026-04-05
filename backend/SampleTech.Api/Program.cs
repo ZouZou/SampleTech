@@ -194,12 +194,22 @@ app.MapControllers();
 app.MapGet("/health", () => Results.Ok(new { status = "ok", version = "0.1.0" }))
    .AllowAnonymous();
 
-// ─── Dev-only: auto-migrate ───────────────────────────────────────────────────
-if (app.Environment.IsDevelopment())
+// ─── Startup: migrate + seed ──────────────────────────────────────────────────
 {
     using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.Migrate();
+    var cfg = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+    var startupLogger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+
+    try
+    {
+        await DbSeeder.SeedAsync(db, cfg, startupLogger);
+    }
+    catch (Exception ex)
+    {
+        startupLogger.LogError(ex, "Database migration/seed failed. Ensure the database is reachable.");
+        throw;
+    }
 }
 
 app.Run();

@@ -37,6 +37,12 @@ public class User
     public bool MfaEnabled { get; set; } = false;
     public DateTimeOffset? LastLoginAt { get; set; }
 
+    /// <summary>Consecutive failed login attempts since last successful login. Reset on success.</summary>
+    public int FailedLoginAttempts { get; set; } = 0;
+
+    /// <summary>Set when account is locked after too many failed attempts. Null = not locked.</summary>
+    public DateTimeOffset? LockedUntil { get; set; }
+
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
     public DateTimeOffset UpdatedAt { get; set; } = DateTimeOffset.UtcNow;
 

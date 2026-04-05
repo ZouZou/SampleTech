@@ -27,4 +27,30 @@ public interface IUserService
         string? ipAddress = null,
         string? userAgent = null,
         CancellationToken ct = default);
+
+    Task<UserDto?> GetByIdAsync(Guid userId, CancellationToken ct = default);
+
+    /// <summary>Creates a password reset token and returns it. In production, this would be emailed.</summary>
+    Task<string?> RequestPasswordResetAsync(
+        string email,
+        string? ipAddress = null,
+        CancellationToken ct = default);
+
+    Task<bool> ResetPasswordAsync(
+        string token,
+        string newPassword,
+        string? ipAddress = null,
+        CancellationToken ct = default);
+
+    Task<UserDto> CreateUserAsync(
+        string email,
+        string firstName,
+        string lastName,
+        UserRole role,
+        Guid? tenantId,
+        string? password,
+        CancellationToken ct = default);
+
+    Task<bool> UpdateUserStatusAsync(Guid userId, UserStatus status, CancellationToken ct = default);
+    Task<bool> UpdateUserRoleAsync(Guid userId, UserRole role, CancellationToken ct = default);
 }
