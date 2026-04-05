@@ -68,14 +68,14 @@ jobs:
 
       - name: Lint
         # Requires ESLint schematic to be added (ng add @angular-eslint/schematics)
-        run: ng lint
+        run: npx ng lint
         continue-on-error: true
 
       - name: Unit tests (Vitest)
-        run: ng test --watch=false
+        run: npx ng test --watch=false
 
       - name: Build (production)
-        run: ng build
+        run: npx ng build
 
   docker-build:
     name: Docker Build (validate)
